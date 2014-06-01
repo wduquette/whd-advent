@@ -87,7 +87,30 @@
 
 (defmethod xlate-command "quit"
   [words]
+  ;; TBD: handle excess words
   #(quit-game!))
+
+;;; TBD: It would be nice to have a look-up from command words to keywords.
+(defmethod xlate-command "n"
+  [words]
+  ;; TBD: handle excess words
+  #(move! :n))
+
+(defmethod xlate-command "s"
+  [words]
+  ;; TBD: handle excess words
+  #(move! :s))
+
+(defmethod xlate-command "e"
+  [words]
+  ;; TBD: handle excess words
+  #(move! :e))
+
+(defmethod xlate-command "w"
+  [words]
+  ;; TBD: handle excess words
+  #(move! :w))
+
 
 (defn eval-command [s]
   (let [words (str/split s #"\s"),
@@ -107,6 +130,7 @@
   (println "Will's Text Adventure")
   (loop []
     (println)
+    ;; TBD: Only describe room in detail if we've moved.
     (say (describe-room (here)))
     (prompt "Well?")
     (eval-command (read-line))
