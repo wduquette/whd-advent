@@ -41,6 +41,20 @@
 
 ;;; NEXT, some functions for querying rooms.
 
+(defn is-room?
+  [room]
+  (if (rooms room) true false))
+
+(defn is-dir?
+  [dir]
+  (if (dir-names dir) true false))
+
+(defn next-room 
+  "Get the next room in the given direction, or nil.
+  TBD: Ultimately, we can fancy this up with computed links."
+  [room dir]
+  (-> rooms room :links dir))
+
 (defn describe-room
   "Returns a text description of a room."
   [room]
