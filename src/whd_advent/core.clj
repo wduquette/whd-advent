@@ -17,12 +17,28 @@
     {;; Where the player is located
      :here :home}))
 
+;;; The fact base.  This is a set of facts; each fact is a vector of
+;;; two or three items, e.g.,
+;;;
+;;; [has-seen :home] -- The player has seen the room :home
+;;;
+;;; The fact base is used to remember arbitrary facts about what's happened,
+;;; other than inventories and player attributes.
+
+(def facts (atom #{}))  ; At first, we don't know anything.
+  
+
 ;;; Game Data Queries
 
 (defn here
   []
   (@player :here))
 
+(defn is-fact? [f]
+  (if (@facts f) true false))
+
+(defn is-not-fact? [f]
+  (not (is-fact? f)))
 
 ;;; Actions
 ;;;
@@ -52,6 +68,11 @@
      (if room 
        (move-to! room)
        (say "You can't go that way."))))
+
+(defn set-fact! 
+  "Add fact f to the set of known facts."
+  [f]
+  (swap! facts conj f))
 
 (defn quit-game!
   "Quit the game.  TBD: Should prompt to save, etc."
