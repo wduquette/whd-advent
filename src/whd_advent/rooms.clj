@@ -55,6 +55,10 @@
   [room dir]
   (-> rooms room :links dir))
 
+(defn room-title 
+  [room]
+  (-> rooms room :title))
+
 (defn describe-room
   "Returns a text description of a room."
   [room]

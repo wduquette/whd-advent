@@ -111,6 +111,11 @@
   ;; TBD: handle excess words
   #(quit-game!))
 
+(defmethod xlate-command "look"
+  [words]
+  ;; TBD: handle excess words
+  #(say (describe-room (here))))
+
 ;;; TBD: It would be nice to have a look-up from command words to keywords.
 (defmethod xlate-command "n"
   [words]
@@ -142,8 +147,14 @@
 ;;; Main Routine
 
 (defn prompt [text]
-  (printf "%s " text)
+  (printf "[%s] %s " (room-title (here)) text)
   (flush))
+
+(defn describe-surroundings
+  [room]
+  (when (is-not-fact? [:seen room])
+    (say (describe-room room))
+    (set-fact! [:seen room])))
 
 (defn -main
   "Main routine for the application."
@@ -151,8 +162,7 @@
   (println "Will's Text Adventure")
   (loop []
     (println)
-    ;; TBD: Only describe room in detail if we've moved.
-    (say (describe-room (here)))
+    (describe-surroundings (here))
     (prompt "Well?")
     (eval-command (read-line))
     (recur)))
