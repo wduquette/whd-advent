@@ -5,15 +5,10 @@
 (ns whd-advent.rooms
   (:require [clojure.string :as str]))
 
-;;; FIRST, some functions for defining rooms.
-
-(defn- make-room
-  "Returns a room structure"
-  [title links description & extra-info]
-  (merge {:title title :links links :description description}
-         (apply hash-map extra-info)))
-
-;;; NEXT, links are to directions.
+;;; ## Directions
+;;;
+;;; Directions are stored internally as keywords.  The values
+;;; in the dir-names map are for display, rather than for input.
 
 (def dir-names {
   :n "North",
@@ -21,9 +16,40 @@
   :e "East",
   :w "West"})
 
-;;; NEXT, the room definitions.
-;;; TBD: One could build rooms up out of multiple sub-maps, possibly
-;;; doing some computation or checking at the same time.
+;;; ## Defining Rooms
+;;;
+;;; A room is identified by a unique keyword, and consists of a map
+;;; with the following keys:
+;;;
+;;;  * `:title` - The room's short name
+;;;  * `:links` - A map whose keys are direction keywords and values are room
+;;;    keywords
+;;;  * `:description` - The room's full description.
+;;;  * Any arbitrary keywords and values needed as the game is developed.
+
+(defn- make-room
+  "Returns a room structure, given the room's title, links, and description,
+  and any optional data values.  "
+  [title links description & extra-info]
+  (merge {:title title :links links :description description}
+         (apply hash-map extra-info)))
+
+
+;;; ## The Game Map
+;;;
+;;; The game map is stored as a map from room keywords to room structures
+;;; in the "rooms" variable.  There are a couple of other things I could do.
+;;;
+;;; 1. The rooms var could contain an atom; then, a (define-room) function
+;;;    could define a complete room and associate it with the atom.  This
+;;;    would be appropriate if I were implementing an adventure game
+;;;    framework into which the game data was loaded.
+;;;
+;;; 2. Rooms could be defined in separate modules (i.e., "areas"), and then
+;;;    all rooms could be pulled together by passing the area vars to one
+;;;    function that initialized the rooms var.  This function could possibly
+;;;    do some computation or sanity checking or caching at the same time,
+;;;    all without using mutable variables.
 
 (def rooms {
   :home
@@ -39,28 +65,38 @@
     (make-room "Neighborhood Park" {:e :street}
                "You're in the park.")})
 
-;;; NEXT, some functions for querying rooms.
+;;; ## Room Queries
+;;;
+;;; These functions are used to query the world map and individual rooms.
 
 (defn is-room?
+  "Returns true if the given value is a room keyword, and false
+   otherwise."
   [room]
   (if (rooms room) true false))
 
 (defn is-dir?
+  "Returns true if the given value is a direction keyword, and false
+  otherwise."
   [dir]
   (if (dir-names dir) true false))
 
 (defn next-room 
-  "Get the next room in the given direction, or nil.
-  TBD: Ultimately, we can fancy this up with computed links."
+  "Given a room and a direction, get the next room in that direction or 
+  nil if none.  Ultimately we can put in logic to allow computed 
+  destinations or blocked links."
   [room dir]
   (-> rooms room :links dir))
 
 (defn room-title 
+  "Returns the room's title."
   [room]
   (-> rooms room :title))
 
 (defn describe-room
-  "Returns a text description of a room."
+  "Returns a text description of a room, including the directions you can
+  go.  Ultimately, this should probably take some options, indicating which
+  information you want to include or not include in the return value."
   [room]
   (let [{:keys [title links description]} (rooms room)]
     (format "%s\n%s\n\nYou can go: %s\n" title description
