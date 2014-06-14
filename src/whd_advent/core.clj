@@ -8,7 +8,8 @@
 (ns whd-advent.core
   (:gen-class)
   (:require [clojure.string :as str])
-  (:use whd-advent.rooms))
+  (:use whd-advent.rooms)
+  (:use whd-advent.vocab))
 
 ;;; ## Game Data
 ;;;
@@ -55,14 +56,16 @@
 
 (def facts (atom #{}))
   
-(defn is-fact? [f]
+(defn is-fact?
   "Returns true if fact `f` (a fact vector) is contained in the fact base,
   and false otherwise."
+  [f]
   (if (@facts f) true false))
 
-(defn is-not-fact? [f]
+(defn is-not-fact?
   "Retruns true if fact `f` (a fact vector) is NOT contained in the fact
   base, and false otherwise."
+  [f]
   (not (is-fact? f)))
 
 ;;; ## Actions
@@ -110,7 +113,7 @@
   (say "Your loss, toots!")
   (System/exit 1))
 
-;;; # Command Translator
+;;; ## Command Translator
 ;;;
 ;;; The Command Translator translates the user's command into a function to
 ;;; be called, and returns the function.  The returned function will often
@@ -126,43 +129,42 @@
 (defmulti xlate-command 
   "Translate the user's command into a function.  The command is received
   as a sequence of words."
-  (fn [words] (first words)))
+  (fn [words] (verb (first words))))
 
 (defmethod xlate-command :default
   [words]
   #(say "I'm sorry, I don't understand."))
 
-(defmethod xlate-command "help"
+(defmethod xlate-command :help
   [words]
   #(say "I'm sorry, there's no help for you."))
 
-(defmethod xlate-command "quit"
+(defmethod xlate-command :quit
   [words]
   ;; TBD: handle excess words
   #(quit-game!))
 
-(defmethod xlate-command "look"
+(defmethod xlate-command :look
   [words]
   ;; TBD: handle excess words
   #(say (describe-room (here))))
 
-;;; TBD: It would be nice to have a look-up from command words to keywords.
-(defmethod xlate-command "n"
+(defmethod xlate-command :n
   [words]
   ;; TBD: handle excess words
   #(move! :n))
 
-(defmethod xlate-command "s"
+(defmethod xlate-command :s
   [words]
   ;; TBD: handle excess words
   #(move! :s))
 
-(defmethod xlate-command "e"
+(defmethod xlate-command :e
   [words]
   ;; TBD: handle excess words
   #(move! :e))
 
-(defmethod xlate-command "w"
+(defmethod xlate-command :w
   [words]
   ;; TBD: handle excess words
   #(move! :w))
@@ -174,7 +176,7 @@
     (f)))
 
 
-;;; # Main Routine
+;;; # Main Line Code
 
 (defn prompt 
   "Returns the user prompt, which includes the current location and some
