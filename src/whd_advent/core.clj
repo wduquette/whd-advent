@@ -8,6 +8,7 @@
 (ns whd-advent.core
   (:gen-class)
   (:require [clojure.string :as str])
+  (:use whd-advent.tools)
   (:use whd-advent.rooms)
   (:use whd-advent.vocab))
 
@@ -116,19 +117,16 @@
 ;;; ## Command Translator
 ;;;
 ;;; The Command Translator translates the user's command into a function to
-;;; be called, and returns the function.  The returned function will often
-;;; mutate memory, e.g., it may move the player from one room to another,
-;;; change the location of things, and so on.  When called, the returned 
-;;; function should return a text message to be displayed to the user
-;;; (possibly "").
+;;; be called, and returns the function.  The returned function is either
+;;; an action, as defined above, or an anonymous function defined in terms
+;;; of one or more actions.  
 ;;;
-;;; The command translator is implemented as a multi-method.
-;;;
-;;; TBD: This will eventually go in its own namespace.
+;;; The command translator is implemented as a multi-method; each method
+;;; implements one verb.
 
 (defmulti xlate-command 
-  "Translate the user's command into a function.  The command is received
-  as a sequence of words."
+  "Translate the user's command into an action function.  The command is 
+  received as a sequence of (presumably) English words."
   (fn [words] (verb (first words))))
 
 (defmethod xlate-command :default
