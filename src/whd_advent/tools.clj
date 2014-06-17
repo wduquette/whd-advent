@@ -13,7 +13,7 @@
 (defn wrap-line 
   "Given a number of text columns and a text string, this function rewraps
   the text string to the given column and returns a sequence of the lines.
-  The function was copied from: http://rosettacode.org/wiki/Word_wrap#Clojure"
+  [Original Source](http://rosettacode.org/wiki/Word_wrap#Clojure)"
   [size text]
   (loop [left size line [] lines []
          words (clojure.string/split text #"\s+")]
@@ -29,6 +29,8 @@
 
 (defn wrap-text
   "Given a number of text columns and a text string, this function rewraps
-  the string to the given column, and returns the new string."
-  [size text]
-  (str/join "\n" (wrap-line size text)))
+  the string to the given column, and returns the new string.  If the number
+  of columns is omitted, it defaults to 72."
+  ([text] (wrap-text 72 text))
+  ([size text]
+   (str/join "\n" (wrap-line size text))))
