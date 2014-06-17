@@ -9,8 +9,9 @@
   (:gen-class)
   (:require [clojure.string :as str])
   (:use whd-advent.tools)
-  (:use whd-advent.rooms)
-  (:use whd-advent.vocab))
+  (:use whd-advent.room)
+  (:use whd-advent.vocab)
+  (:use whd-advent.rooms))
 
 ;;; ## Game Data
 ;;;

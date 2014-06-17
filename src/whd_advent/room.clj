@@ -1,8 +1,8 @@
-;;;; rooms.clj
+;;;; room.clj
 ;;;;
-;;;; Room definitions for Will's Text Adventure
+;;;; Room definition and query code for Will's Text Adventure
 
-(ns whd-advent.rooms
+(ns whd-advent.room
   (:require [clojure.string :as str])
   (:use whd-advent.tools))
 
@@ -50,27 +50,6 @@
   (swap! rooms assoc kw (apply make-room room-info)))
 
   
-
-
-;;; ## World Map
-;;;
-;;; This is the world map data
-(define-room :home "Home Base" 
-  {:n :street}
-  "Your home base is the picture of comfort.")
-
-(define-room :street "The Street" 
-  {:s :home :e :corner :w :park}
-  "It's gritty here in the mean streets.")
-
-(define-room :corner "The Corner"
-  {:w :street}
-  "You're down on the corner.")
-
-(define-room :park "Neighborhood Park"
-  {:e :street}
-  "You're in the park.")
-
 ;;; ## Room Queries
 ;;;
 ;;; These functions are used to query the world map and individual rooms.
