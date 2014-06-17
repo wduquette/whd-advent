@@ -83,10 +83,18 @@
 ;;; The following functions can be used to build actions.
 
 (defn say 
-  "Output one or more items to the user.  TBD: Ultimately, I'll want to
-  provide some more processing here, i.e., word-wrapping."
+  "Output one or more items to the user.
+  TBD: Ideally, if there are consecutive items it should put a space
+  between them."
   [& xs]
-  (apply println xs))
+  (doseq [s xs]
+    (case s
+      :br (print "\n")
+      :para (print "\n\n")
+      (print s)))
+  (print "\n"))
+
+
 
 (defn move-to!
   "Magic move the player to the given `room` (which must exist)."
@@ -136,7 +144,9 @@
 
 (defmethod xlate-command :help
   [words]
-  #(say "I'm sorry, there's no help for you."))
+  #(say (wrap-text 
+          "You can use the usual adventure game commands.
+          To quit the game, enter 'quit'.")))
 
 (defmethod xlate-command :quit
   [words]
@@ -146,7 +156,13 @@
 (defmethod xlate-command :look
   [words]
   ;; TBD: handle excess words
-  #(say (describe-room (here))))
+  #(say (describe-room (here)) :para 
+        (describe-exits (here))))
+
+(defmethod xlate-command :exits
+  [words]
+  ;; TBD: handle excess words
+  #(say (describe-exits (here))))
 
 (defmethod xlate-command :n
   [words]
@@ -189,8 +205,9 @@
   Then, remember that it has been seen."
   [room]
   (when (is-not-fact? [:seen room])
-    (say (describe-room room))
-    (set-fact! [:seen room])))
+    (set-fact! [:seen room])
+    (say (describe-room room) :para 
+         (describe-exits room))))
 
 (defn -main
   "Main routine for the application, including the game REPL."

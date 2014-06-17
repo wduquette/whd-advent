@@ -43,7 +43,8 @@
 
 (define-verb :help "?" "help")
 (define-verb :look "l" "look")
-(define-verb :quit "quit" "exit" "bye")
+(define-verb :exits "exits")
+(define-verb :quit "quit" "bye")
 
 (define-verb :n "n" "north")
 (define-verb :s "s" "south")

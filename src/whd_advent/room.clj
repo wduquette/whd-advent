@@ -79,10 +79,14 @@
   (-> @rooms room :title))
 
 (defn describe-room
-  "Returns a text description of a room, including the directions you can
-  go.  Ultimately, this should probably take some options, indicating which
-  information you want to include or not include in the return value."
+  "Returns a text description of a room, including the title"
   [room]
-  (let [{:keys [title links description]} (@rooms room)]
-    (format "%s\n%s\n\nYou can go: %s\n" title description
-            (str/join ", " (map dir-names (keys links))))))
+  (let [{:keys [title description]} (@rooms room)]
+    (format "%s\n%s" title description)))
+
+(defn describe-exits
+  "Returns a description of the directions you can go from the `room`."
+  [room]
+  (let [links (-> @rooms room :links)
+        text (str/join ", " (map dir-names (keys links)))] 
+    (str "You can go: " text )))
