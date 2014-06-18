@@ -38,9 +38,15 @@
 
 (defn- make-room
   "Returns a room structure, given the room's title, links, and description,
-  and any optional data values.  "
+  and any optional data values:
+
+  * `:description-hook` A function that takes the description and returns a
+    possibly modified description."
   [title links description & extra-info]
-  (merge {:title title :links links :description (wrap-text description)}
+  (merge {:title            title 
+          :links            links 
+          :description      description 
+          :description-hook identity}
          (apply hash-map extra-info)))
 
 (defn define-room 
@@ -81,8 +87,9 @@
 (defn describe-room
   "Returns a text description of a room, including the title"
   [room]
-  (let [{:keys [title description]} (@rooms room)]
-    (format "%s\n%s" title description)))
+  (let [{:keys [title description description-hook]} (@rooms room)]
+    (let [s (description-hook description)]
+      (format "%s\n%s" title s))))
 
 (defn describe-exits
   "Returns a description of the directions you can go from the `room`."
