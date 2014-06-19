@@ -1,12 +1,15 @@
 ;;;; room.clj
 ;;;;
-;;;; Room definition and query code for Will's Text Adventure
+;;;; Room definition and query code for Will's Text Adventure.
+;;;;
+;;;; In this module, the argument "room" means a room ID keyword, and 
+;;;; "r" means a room's data map.
 
 (ns whd-advent.room
   (:require [clojure.string :as str])
   (:use whd-advent.tools))
 
-;;; ## Directions
+;;; # Directions
 ;;;
 ;;; Directions are stored internally as keywords.  The values
 ;;; in the dir-names map are for display, rather than for input; see 
@@ -18,8 +21,18 @@
   :e "East",
   :w "West"})
 
+;;; # Room Description Hooks
+;;;
+;;; A room description hook is a function that returns a room's current
+;;; description.  The default hook simply returns the room's :description.
 
-;;; ## Defining Rooms
+(defn default-room-description-hook
+  "Returns the room's :description given the room's map."
+  [r]
+  (wrap-text (r :description)))
+
+
+;;; # Defining Rooms
 ;;;
 ;;; A room is identified by a unique keyword, and consists of a map
 ;;; with the following keys:
@@ -40,13 +53,13 @@
   "Returns a room structure, given the room's title, links, and description,
   and any optional data values:
 
-  * `:description-hook` A function that takes the description and returns a
-    possibly modified description."
+  * `:description-hook` - A function that takes the room's map and returns a
+    complete description."
   [title links description & extra-info]
   (merge {:title            title 
           :links            links 
           :description      description 
-          :description-hook identity}
+          :description-hook default-room-description-hook}
          (apply hash-map extra-info)))
 
 (defn define-room 
@@ -87,9 +100,9 @@
 (defn describe-room
   "Returns a text description of a room, including the title"
   [room]
-  (let [{:keys [title description description-hook]} (@rooms room)]
-    (let [s (description-hook description)]
-      (format "%s\n%s" title s))))
+  (let [r (@rooms room) 
+        {:keys [title description-hook]} r]
+    (format "%s\n%s" title (description-hook r))))
 
 (defn describe-exits
   "Returns a description of the directions you can go from the `room`."

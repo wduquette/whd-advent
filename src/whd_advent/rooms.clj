@@ -12,23 +12,21 @@
 ;;;
 ;;; This is the world map data
 
-;; TBD: This hook function is really ugly.  What you want is a function
-;; that takes a base string and some possibly negated facts and builds up
-;; a single block of text; and it should be concise.
-;; Perhaps the other strings should be defined as room attributes?
-;; But I don't want to force all rooms into one structure either.
+;;; TBD: this is better: a hook that takes the room map and runs with
+;;; it, where the additional pieces of text are stored in the map.
+;;; Perhaps a standard hook that takes a template [flag kw flag kw]
+;;; and builds up the string that way, filtering out nils?
 (define-room :home "Home Base" 
   {:n :street}
   "Your home base is the picture of comfort, from the deep 
   pile shag carpeting to the oversized leather couch."
+  :tv-broken 
+  "Still, you'd be much happier if your big-screen TV was working."
   :description-hook 
-  (fn [s]
+  (fn [r]
     (wrap-text
-      (str/join "  " 
-                [s,  
-                (when (is-not-fact? [:tv-works])
-                  "Still, you'd be much happier if your big-screen TV
-                  was working.")]))))
+      (str/join "  " [(r :description)  
+                      (when (is-not-fact? [:tv-works]) (r :tv-broken))]))))
 
 (define-room :street "The Street" 
   {:s :home :e :corner :w :park}
