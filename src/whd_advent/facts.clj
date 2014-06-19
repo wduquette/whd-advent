@@ -17,9 +17,11 @@
 ;;;;
 ;;;; Facts are added to the Fact Base using the `set-fact!` action.
 
+;;;; TBD: it might be possible to pretty this up even further.  If
+;;;; there's one token, a sequence, it's the fact vector.  Otherwise,
+;;;; take all of the arguments as one fact vector.
 
-;;;; The Fact Base is a set stored in the `facts` atom.  It is empty
-;;;; at the beginning of the game.
+;;;; The Fact Base is a set stored in the `facts` atom.
 
 (def facts (atom #{}))
 
