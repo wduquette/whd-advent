@@ -29,16 +29,11 @@
       (when (seq line)
         (conj lines (apply str line))))))
 
-(defn join-text
-  "Given a separator and a sequence of strings and nils, joins the 
-  non-nil elements of the sequence using the separator."
-  [sep ss]
-  (str/join sep (filter  (fn [x] (not (nil? x))) ss)))
 
 (defn wrap-text
-  "Given a sequence of text strings, with nils optionally interspersed,
-  joins the non-nil elements and word-wraps them to fit the current
-  number of *columns*, returning the wrapped string."
-  [& ss]
-  (str/join "\n" (wrap-line *columns* (join-text " " ss))))
-  
+  "Given a number of text columns and a sequence of strings and nils, this 
+  function joins the sequence into one string, and then rewraps it to fit
+  within the given number of columns.  If the number
+  of columns is omitted, it defaults to *columns*."
+  ([ss] (wrap-text *columns* ss))
+  ([width ss] (str/join "\n" (wrap-line width (str/join " " ss)))))
