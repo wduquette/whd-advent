@@ -29,7 +29,7 @@
 (defn default-room-description-hook
   "Returns the room's :description given the room's map."
   [r]
-  (wrap-text [(r :description)]))
+  (wrap-text (r :description)))
 
 
 ;;; # Defining Rooms

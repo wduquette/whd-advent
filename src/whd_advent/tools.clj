@@ -31,9 +31,11 @@
 
 
 (defn wrap-text
-  "Given a number of text columns and a sequence of strings and nils, this 
-  function joins the sequence into one string, and then rewraps it to fit
-  within the given number of columns.  If the number
-  of columns is omitted, it defaults to *columns*."
+  "Wraps a string to fit a specified number of text columns.  If the width
+  is omitted, it defaults to *columns*.  The string may be specified as a
+  single string, or as a sequence of strings; the sequence may contain
+  nils, which will be ignored."
   ([ss] (wrap-text *columns* ss))
-  ([width ss] (str/join "\n" (wrap-line width (str/join " " ss)))))
+  ([width ss] 
+    (let [s (if (string? ss) ss (str/join " " ss))] 
+      (str/join "\n" (wrap-line width s)))))
