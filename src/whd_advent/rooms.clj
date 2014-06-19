@@ -22,11 +22,12 @@
   pile shag carpeting to the oversized leather couch."
   :tv-broken 
   "Still, you'd be much happier if your big-screen TV was working."
+  :template [true :description [:not :tv-works] :tv-broken]
   :description-hook 
   (fn [r]
     (wrap-text
       (str/join "  " [(r :description)  
-                      (when (is-not-fact? [:tv-works]) (r :tv-broken))]))))
+                      (when (fact? [:not :tv-works]) (r :tv-broken))]))))
 
 (define-room :street "The Street" 
   {:s :home :e :corner :w :park}

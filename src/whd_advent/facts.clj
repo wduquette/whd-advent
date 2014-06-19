@@ -28,14 +28,18 @@
   [f]
   (swap! facts conj f))
   
-(defn is-fact?
+(defn fact?
   "Returns true if fact `f` (a fact vector) is contained in the fact base,
-  and false otherwise."
+  and false otherwise.  If the first token of `f` is `:not`, the sense
+  is inverted."
   [f]
-  (if (@facts f) true false))
+  (if (not= (first f) :not)
+    (contains? @facts f)
+    (not (contains? @facts (rest f)))))
 
-(defn is-not-fact?
+(defn not-fact?
   "Retruns true if fact `f` (a fact vector) is NOT contained in the fact
-  base, and false otherwise."
+  base, and false otherwise.  If the first token of `f` is `:not`, the sense
+  is inverted."
   [f]
-  (not (is-fact? f)))
+  (not (fact? f)))
