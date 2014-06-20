@@ -40,8 +40,14 @@
     (not (contains? @facts (rest f)))))
 
 (defn not-fact?
-  "Retruns true if fact `f` (a fact vector) is NOT contained in the fact
+  "Returns true if fact `f` (a fact vector) is NOT contained in the fact
   base, and false otherwise.  If the first token of `f` is `:not`, the sense
   is inverted."
   [f]
   (not (fact? f)))
+
+(defn if-fact
+  "Returns x if f is a fact, and y (or nil) otherwise.  f is interpreted
+  as for (fact?)."
+  ([f x]   (if-fact f x nil))
+  ([f x y] (if (fact? f) x y)))
