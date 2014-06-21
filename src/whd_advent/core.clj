@@ -28,9 +28,10 @@
 
 ;;; The `player` variable contains the player structure.
 
-(def player 
-  (atom 
-    {:here :home}))
+(def player
+  (atom
+    {:state :playing
+     :here  :home}))
 
 (defn here
   "Returns the current location of the player."
@@ -45,12 +46,12 @@
 ;;; the fact base, and so on.
 ;;;
 ;;; Commands are translated into actions by the command translater; and
-;;; the resulting actions are executed by the game REPL.  Note that 
+;;; the resulting actions are executed by the game REPL.  Note that
 ;;; the action functions are often anonymous.
 ;;;
 ;;; The following functions can be used to build actions.
 
-(defn say 
+(defn say
   "Output one or more items to the user.
   TBD: Ideally, if there are consecutive items it should put a space
   between them."
@@ -62,7 +63,10 @@
       (print s)))
   (print "\n"))
 
-
+(defn set-state!
+  "Sets a new game state.  Normally it's :playing or :done."
+  [kw]
+  (swap! player assoc :state kw))
 
 (defn move-to!
   "Magic move the player to the given `room` (which must exist)."
@@ -76,7 +80,7 @@
   [dir]
   {:pre [(is-dir? dir)]}
   (let [room (next-room (here) dir)]
-     (if room 
+     (if room
        (move-to! room)
        (say "You can't go that way."))))
 
@@ -85,20 +89,20 @@
   "Quit the game.  TBD: Should prompt to save, etc."
   []
   (say "Your loss, toots!")
-  (System/exit 1))
+  (set-state! :done))
 
 ;;; ## Command Translator
 ;;;
 ;;; The Command Translator translates the user's command into a function to
 ;;; be called, and returns the function.  The returned function is either
 ;;; an action, as defined above, or an anonymous function defined in terms
-;;; of one or more actions.  
+;;; of one or more actions.
 ;;;
 ;;; The command translator is implemented as a multi-method; each method
 ;;; implements one verb.
 
-(defmulti xlate-command 
-  "Translate the user's command into an action function.  The command is 
+(defmulti xlate-command
+  "Translate the user's command into an action function.  The command is
   received as a sequence of (presumably) English words."
   (fn [words] (verb (first words))))
 
@@ -108,7 +112,7 @@
 
 (defmethod xlate-command :help
   [words]
-  #(say (wrap-text 
+  #(say (wrap-text
           "You can use the usual adventure game commands.
           To quit the game, enter 'quit'.")))
 
@@ -120,7 +124,7 @@
 (defmethod xlate-command :look
   [words]
   ;; TBD: handle excess words
-  #(say (describe-room (here)) :para 
+  #(say (describe-room (here)) :para
         (describe-exits (here))))
 
 (defmethod xlate-command :exits
@@ -157,7 +161,7 @@
 
 ;;; # Main Line Code
 
-(defn prompt 
+(defn prompt
   "Returns the user prompt, which includes the current location and some
   text chosen by the caller."
   [text]
@@ -170,16 +174,18 @@
   [room]
   (when (fact? [:not :seen room])
     (set-fact! [:seen room])
-    (say (describe-room room) :para 
+    (say (describe-room room) :para
          (describe-exits room))))
 
 (defn -main
   "Main routine for the application, including the game REPL."
   [& args]
+  (set-state! :playing)
   (println "Will's Text Adventure")
   (loop []
     (println)
     (describe-surroundings (here))
     (prompt "Well?")
     (eval-command (read-line))
-    (recur)))
+    (when (= (@player :state) :playing)
+      (recur))))
