@@ -12,10 +12,6 @@
 ;;;
 ;;; This is the world map data
 
-;;; TBD: this is better: a hook that takes the room map and runs with
-;;; it, where the additional pieces of text are stored in the map.
-;;; Perhaps a standard hook that takes a template [flag kw flag kw]
-;;; and builds up the string that way, filtering out nils?
 (define-room :home "Home Base"
   {:n :street}
   ["Your home base is the picture of comfort, from the deep
