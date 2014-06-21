@@ -7,7 +7,8 @@
 
 (ns whd-advent.room
   (:require [clojure.string :as str])
-  (:use whd-advent.tools))
+  (:use whd-advent.tools)
+  (:use whd-advent.facts))
 
 ;;; # Directions
 ;;;
@@ -27,9 +28,24 @@
 ;;; description.  The default hook simply returns the room's :description.
 
 (defn default-room-description-hook
-  "Returns the room's :description given the room's map."
+  "Wraps and returns the room's :description as is, given room map `r`."
   [r]
   (wrap-text (r :description)))
+
+(defn fact-based-room-description-hook
+  "Wraps returns the room's description, treating the :description as a
+   sequence of items to be included in the description.  An item can be
+   one of the following:
+
+   1. A simple text string, to be included as is
+   2. A fact/text string pair, to be included if the fact is true, per `fact?`."
+  [r]
+  (wrap-text 
+    (map (fn [x]
+           (if (string? x) x
+             (let [[f t] x]
+               (if (or (true? f) (fact? f)) t))))
+         (r :description))))
 
 
 ;;; # Defining Rooms
@@ -66,7 +82,8 @@
   "Creates a room structure, given the room's ID, title, links, and description,
   and any optional data values, and adds it to the world map."
   [kw & room-info]
-  (swap! rooms assoc kw (apply make-room room-info)))
+  (swap! rooms assoc kw (apply make-room room-info))
+  kw)
 
   
 ;;; ## Room Queries
