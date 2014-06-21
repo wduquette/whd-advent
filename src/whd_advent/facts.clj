@@ -15,21 +15,32 @@
 ;;;; * `[has-seen room]` -- The player has seen the given `room`.  This
 ;;;;   determines whether the room's full description is given or not.
 ;;;;
-;;;; Facts are added to the Fact Base using the `set-fact!` action.
-
-;;;; TBD: it might be possible to pretty this up even further.  If
-;;;; there's one token, a sequence, it's the fact vector.  Otherwise,
-;;;; take all of the arguments as one fact vector.
-
+;;;; Facts are added to the Fact Base using the `add-fact!` action, and
+;;;; can be deleted using `remove-fact!`.
+;;;;
 ;;;; The Fact Base is a set stored in the `facts` atom.
 
-(def facts (atom #{}))
+(def facts 
+   ;; These are the initial facts; they represent problems for the user to
+   ;; solve, or conditions for the user to change.
+   ;; TBD: If this were a separable framework, the game would need to add
+   ;; its own facts at start-up.
 
-(defn set-fact! 
+  (atom #{
+   [:sewer :clogged]
+   [:tv :broken]
+}))
+
+(defn add-fact! 
   "Add fact `f` to the set of known facts."
   [f]
   (swap! facts conj f))
-  
+
+(defn remove-fact! 
+  "Remove fact `f` from the set of known facts, if in fact it is there."
+  [f]
+  (swap! facts disj f))
+
 (defn fact?
   "Returns true if fact `f` (a fact vector) is contained in the fact base,
   and false otherwise.  If the first token of `f` is `:not`, the sense

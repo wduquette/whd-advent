@@ -172,8 +172,8 @@
   "Describe the `room` to the player if it hasn't been seen before.
   Then, remember that it has been seen."
   [room]
-  (when (fact? [:not :seen room])
-    (set-fact! [:seen room])
+  (when (fact? [:not :has-seen room])
+    (add-fact! [:has-seen room])
     (say (describe-room room) :para
          (describe-exits room))))
 

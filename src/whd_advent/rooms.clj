@@ -25,7 +25,7 @@
   :description-hook
   #(wrap-text
      [(% :description)
-      (if-fact [:not :tv-works] (% :tv-broken))]))
+      (if-fact [:tv :broken] (% :tv-broken))]))
 
 (define-room :street "The Street"
   {:s :home :e :corner :w :park}
@@ -35,7 +35,7 @@
   :description-hook
   #(wrap-text
     [(% :description)
-     (if-fact [:not :sewer-fixed] (% :is-smelly))
+     (if-fact [:sewer :clogged] (% :is-smelly))
      (% :end-description)]))
 
 (define-room :corner "The Corner"
@@ -52,5 +52,5 @@
   :description-hook
   #(wrap-text
     [(% :description)
-     (if-fact [:not :sewer-fixed] (% :is-smelly))]))
+     (if-fact [:sewer :clogged] (% :is-smelly))]))
 
