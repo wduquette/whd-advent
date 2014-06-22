@@ -12,6 +12,7 @@
   (:use whd-advent.tools)
   (:use whd-advent.describe)
   (:use whd-advent.facts)
+  (:use whd-advent.entity)
   (:use whd-advent.room)
   (:use whd-advent.vocab)
   (:use whd-advent.rooms))
@@ -71,19 +72,19 @@
   (swap! player assoc :state kw))
 
 (defn move-to!
-  "Magic move the player to the given `room` (which must exist)."
-  [room]
-  {:pre [(is-room? room)]} ; It's a valid room: it has an entry in rooms.
-  (swap! player assoc :here room))
+  "Magic move the player to the given room `r` (which must exist)."
+  [r]
+  {:pre [(room? r)]} ; It's a valid room.
+  (swap! player assoc :here r))
 
 (defn move!
   "Try to move the player in direction `dir`, notifying the user if this
   is not possible."
   [dir]
-  {:pre [(is-dir? dir)]}
-  (let [room (next-room (here) dir)]
-     (if room
-       (move-to! room)
+  {:pre [(dir? dir)]}
+  (let [r (next-room (here) dir)]
+     (if r
+       (move-to! r)
        (say "You can't go that way."))))
 
 
@@ -167,17 +168,17 @@
   "Returns the user prompt, which includes the current location and some
   text chosen by the caller."
   [text]
-  (printf "[%s] %s " (room-title (here)) text)
+  (printf "[%s] %s " (=> (here) :name) text)
   (flush))
 
 (defn describe-surroundings
-  "Describe the `room` to the player if it hasn't been seen before.
+  "Describe room `r` to the player if it hasn't been seen before.
   Then, remember that it has been seen."
-  [room]
-  (when (fact? [:not :has-seen room])
-    (add-fact! [:has-seen room])
-    (say (describe-room room) :para
-         (describe-exits room))))
+  [r]
+  (when (fact? [:not :has-seen r])
+    (add-fact! [:has-seen r])
+    (say (describe-room r) :para
+         (describe-exits r))))
 
 (defn -main
   "Main routine for the application, including the game REPL."

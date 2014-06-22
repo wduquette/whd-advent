@@ -34,7 +34,7 @@
   ["You're in the park.  You can tell it's the park because of the statue
     in the middle and the low wrought iron fence all of the way around.
     But it's still gritty."
-   [[:sewer :clogged] "And smelly."]])
+   [[:sewer :clogged] "And smelly.  Maybe it isn't you."]])
 
 (define-room :pub "The Local Pub"
   {:s :street}
