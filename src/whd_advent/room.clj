@@ -9,8 +9,7 @@
   (:require [clojure.string :as str])
   (:use whd-advent.debug)
   (:use whd-advent.tools)
-  (:use whd-advent.describe)
-  (:use whd-advent.facts))
+  (:use whd-advent.describe))
 
 ;;; # Directions
 ;;;
@@ -63,11 +62,17 @@
 ;;;
 ;;; These functions are used to query the world map and individual rooms.
 
+(defn room
+  "Access rooms maps and room attributes.  Given a room, returns the room's
+  map.  Given a room and one or more keys, drills down into nested maps."
+  ([room] (@rooms room))
+  ([room & rest] (get-in (@rooms room) rest)))
+
 (defn is-room?
   "Returns true if the given value is a room keyword, and false
    otherwise."
   [room]
-  (if (@rooms room) true false))
+  (contains? @rooms room)
 
 (defn is-dir?
   "Returns true if the given value is a direction keyword, and false
