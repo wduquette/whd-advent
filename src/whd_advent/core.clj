@@ -9,6 +9,7 @@
   (:gen-class)
   (:require [clojure.string :as str])
   (:use whd-advent.tools)
+  (:use whd-advent.describe)
   (:use whd-advent.facts)
   (:use whd-advent.room)
   (:use whd-advent.vocab)

@@ -8,6 +8,7 @@
 (ns whd-advent.room
   (:require [clojure.string :as str])
   (:use whd-advent.tools)
+  (:use whd-advent.describe)
   (:use whd-advent.facts))
 
 ;;; # Directions
@@ -21,31 +22,6 @@
   :s "South",
   :e "East",
   :w "West"})
-
-;;; # Room Description Hooks
-;;;
-;;; A room description hook is a function that returns a room's current
-;;; description.  The default hook simply returns the room's :description.
-
-(defn default-room-description-hook
-  "Wraps and returns the room's :description as is, given room map `r`."
-  [r]
-  (wrap-text (r :description)))
-
-(defn fact-based-room-description-hook
-  "Wraps returns the room's description, treating the :description as a
-   sequence of items to be included in the description.  An item can be
-   one of the following:
-
-   1. A simple text string, to be included as is
-   2. A fact/text string pair, to be included if the fact is true, per `fact?`."
-  [r]
-  (wrap-text 
-    (map (fn [x]
-           (if (string? x) x
-             (let [[f t] x]
-               (if (or (true? f) (fact? f)) t))))
-         (r :description))))
 
 
 ;;; # Defining Rooms
@@ -67,15 +43,11 @@
 
 (defn- make-room
   "Returns a room structure, given the room's title, links, and description,
-  and any optional data values:
-
-  * `:description-hook` - A function that takes the room's map and returns a
-    complete description."
+  and any optional data values."
   [title links description & extra-info]
   (merge {:title            title 
           :links            links 
-          :description      description 
-          :description-hook default-room-description-hook}
+          :description      description} 
          (apply hash-map extra-info)))
 
 (defn define-room 
@@ -117,9 +89,8 @@
 (defn describe-room
   "Returns a text description of a room, including the title"
   [room]
-  (let [r (@rooms room) 
-        {:keys [title description-hook]} r]
-    (format "%s\n%s" title (description-hook r))))
+  (let [r (@rooms room)]
+    (format "%s\n%s" (r :title) (describe r))))
 
 (defn describe-exits
   "Returns a description of the directions you can go from the `room`."
