@@ -14,6 +14,7 @@
   (:use whd-advent.facts)
   (:use whd-advent.entity)
   (:use whd-advent.room)
+  (:use whd-advent.thing)
   (:use whd-advent.vocab)
   (:use whd-advent.rooms))
 

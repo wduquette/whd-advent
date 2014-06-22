@@ -36,8 +36,6 @@
 ;;; Taken altogether, the rooms form the world map.
 ;;; Use `(define-room ...)` to add a room to the map.
 
-(def rooms (atom {}))
-  
 (defn define-room 
   "Creates a room structure, given the room's ID, title, links, and description,
   and any optional data values passed as a map in `extra-info`, and adds it to 
