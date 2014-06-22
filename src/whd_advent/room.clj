@@ -37,15 +37,15 @@
 ;;; Use `(define-room ...)` to add a room to the map.
 
 (def rooms (atom {}))
-
+  
 (defn define-room 
   "Creates a room structure, given the room's ID, title, links, and description,
   and any optional data values passed as a map in `extra-info`, and adds it to 
   the world map."
-  [r name links description & extra-info]
-  (define-entity r :room name description 
-      (merge {:links links} extra-info)))
-  
+  [r name links description & rest]
+  (let [base [:room r name description :links links]]
+    (apply define-entity (concat base rest)))) 
+
 ;;; ## Room Queries
 ;;;
 ;;; These functions are used to query the world map and individual rooms.

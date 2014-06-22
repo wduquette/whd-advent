@@ -6,6 +6,27 @@
   (:require [clojure.string :as str])
   (:use whd-advent.debug))
 
+;;; ## Argument Handling
+
+(defn arg-map 
+  "This function is used to handle an `& rest` function argument.  The
+  value of `rest` is assumed to be either a map of optional parameters
+  or a sequence of length 1 containing a map of optional parameters.
+  The result of argmap is always a map (though possibly an empty one).
+
+  This allows a function to take a map of optional arguments either
+  in-line are as a single argument.
+
+  NOTE: This is a Tclish solution to the problem of calling a variadic
+  function when you've got a variable containing multiple
+  arguments.  The more Clojuresque solution seems to be creating one sequence 
+  of arguments and using apply."
+  [rest]
+  (cond 
+    (nil? rest) {} 
+    (= (count rest) 1) (first rest) 
+    :else (apply hash-map rest)))
+
 ;;; ## String Processing
 ;;;
 ;;; The following functions are used for string processing, i.e., for

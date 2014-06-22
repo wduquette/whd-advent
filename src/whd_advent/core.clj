@@ -17,6 +17,15 @@
   (:use whd-advent.vocab)
   (:use whd-advent.rooms))
 
+(defn argmap [rest]
+  (cond 
+    (nil? rest) nil 
+    (= (count rest) 1) (first rest) 
+    :else (apply hash-map rest)))
+
+(defn foo [x & rest]
+  (println x "=>" (argmap rest)))
+
 ;;; ## Game Data
 ;;;
 ;;; The game data currently consists of two things: the player structure and

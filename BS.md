@@ -5,24 +5,11 @@ the process of being overtaken by events.
 
 ## Questions about patterns
 
-Rooms and Things follow the same pattern:
+Rooms and Things follow the same pattern.  I've defined the entity module
+to abstract it.  
 
-* An atom, containing a map of entity IDs to entity maps.
+Q: Is there an existing Clojure abstraction I should use?
 
-* A (define-<entity>) function that defines a new entity given two or three
-  standard attributes while allowing for others to be defined.
-
-* A number of standard queries, e.g., (<entity> :key....), (is-<entity>?),
-  etc.
-
-Q: Is there a way to standardize this pattern, so that I don't need to just
-copy the code?
-
-A: Macros would do it.
-
-Q: Is there an existing Clojure abstraction that I should use?
-
-A: ?
 
 ## Questions about descriptions
 
@@ -43,6 +30,3 @@ with one command.
 
 * I'll want thing.clj and things.clj in parallel to room.clj/rooms.clj.
 
-* (defthing).
-
-* (

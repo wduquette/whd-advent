@@ -34,24 +34,16 @@
 
 (def entities (atom {}))
 
-(defn- make-entity
-  "Returns a entity structure, given the entity's type, name and description,
-  and any optional data values as a map in `extra-info`"
-  [type name description extra-info]
-  (merge {:type         type
-          :name         name 
-          :description  description} 
-          extra-info))
-
 (defn define-entity 
-  "Creates a entity structure, given the entity's ID, type, name, and 
+  "Creates a entity structure, given the entity's type, ID, type, name, and 
   description, and any optional data values, and adds it to the collection of 
   entities."
-  [e & entity-info]
-  (swap! entities assoc e (apply make-entity entity-info))
-  e)
+  [type e name description & rest]
+  (let [base [:type type :name name :description description]]
+    (swap! entities assoc e (apply hash-map (concat base rest)))
+  e))
 
-  
+
 ;;; ## Entity Queries
 ;;;
 ;;; These functions are used to query entities..
