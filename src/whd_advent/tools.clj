@@ -3,7 +3,8 @@
 ;;;; This module contains individual functions for various purposes.
 
 (ns whd-advent.tools
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str])
+  (:use whd-advent.debug))
 
 ;;; ## String Processing
 ;;;
@@ -39,3 +40,4 @@
   ([width ss] 
     (let [s (if (string? ss) ss (str/join " " ss))] 
       (str/join "\n" (wrap-line width s)))))
+
