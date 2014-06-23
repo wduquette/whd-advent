@@ -9,8 +9,7 @@
   (:require [clojure.string :as str])
   (:use whd-advent.debug)
   (:use whd-advent.tools)
-  (:use whd-advent.entity)
-  (:use whd-advent.describe))
+  (:use whd-advent.entity))
 
 
 ;;; # Defining Things
@@ -40,8 +39,3 @@
   [t]
   (= (=> t :type) :thing))
 
-(defn describe-thing
-  "Returns a text description of a thing.
-  TODO: this should be the standard (describe) function."
-  [t]
-  (describe (=> t)))

@@ -8,8 +8,7 @@
   (:require [clojure.string :as str])
   (:use whd-advent.debug)
   (:use whd-advent.tools)
-  (:use whd-advent.entity)
-  (:use whd-advent.describe))
+  (:use whd-advent.entity))
 
 ;;; # Directions
 ;;;
@@ -71,7 +70,7 @@
   "Returns a text description of a room, including the name.
   TODO: This concatenation should be done elsewhere."
   [r]
-  (format "%s\n%s" (=> r :name) (describe (=> r))))
+  (format "%s\n%s" (=> r :name) (describe r)))
 
 (defn describe-exits
   "Returns a description of the directions you can go from the `room`."

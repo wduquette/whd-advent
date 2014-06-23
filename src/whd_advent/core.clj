@@ -10,7 +10,6 @@
   (:require [clojure.string :as str])
   (:use whd-advent.debug)
   (:use whd-advent.tools)
-  (:use whd-advent.describe)
   (:use whd-advent.facts)
   (:use whd-advent.entity)
   (:use whd-advent.room)
