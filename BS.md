@@ -11,22 +11,26 @@ to abstract it.
 Q: Is there an existing Clojure abstraction I should use?
 
 
-## Questions about descriptions
-
-The (describe) command knows how to describe an entity given its map.
-But it could also describe something given its keyword; after all, all 
-game entity keywords should be unique.  However, there's currently no
-way to retrieve an arbitrary entity's map.  There could be, though.
-(get-entity kw) could do a cond, (is-room? kw), etc., to retrieve it.
-Alternatively, all entities could be stored in a single map, with an
-entity type keyword, e.g., `:type :room`, `:type :thing`.
-
-The (describe-room) function is an anomaly: it includes the title.  I'd
-rather leave the concatenation of the title with the description in 
-(describe-surroundings) and the "look" command, and describe all things
-with one command.
-
 ## Things and inventories
 
-* I'll want thing.clj and things.clj in parallel to room.clj/rooms.clj.
+Things can be in rooms.  How do they get there?
 
+* Assigned to initial room on definition of thing
+* Assigned to initial room on definition of room
+* Assigned to initial room as part of initial set up?
+
+Inventory is truly dynamic, where room and thing definitions are not.
+Could define initial locations using one routine, that can also be used
+when starting a new game; also could associate initial content with the
+rooms and build inventories automatically.
+
+"Furniture" things exist in rooms for the purpose of being examined and
+otherwise interacted with; they cannot be taken.
+
+There are a number of kinds of thing that have inventories: rooms, the player,
+other mobs, and things like boxes and desks.
+
+For command processing, we need to know what objects are visible in a room,
+and what vocabulary can be used to refer to them.  The :sofa, the [:red :key].
+
+We need to able to move things from one inventory to another.  

@@ -30,6 +30,7 @@
 ;;;
 ;;;  * `:links` - A map whose keys are direction keywords and values are room
 ;;;    keywords
+;;;  * `:inventory` - A vector of things present in the room.
 ;;;  * Any arbitrary keywords and values needed as the game is developed.
 ;;;
 ;;; Taken altogether, the rooms form the world map.

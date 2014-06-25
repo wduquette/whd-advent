@@ -17,7 +17,10 @@
 ;;; A thing is an entity (see entity.clj).  It has the standard attributes,
 ;;; plus these:
 ;;;
-;;;  * TBD, but there will be some.
+;;;  * :furniture true|false - Is it an immovable part of the room?
+;;;    Defaults to false.  Furniture should be described in the room
+;;;    description.
+;;;  * TBD
 ;;;  * Any arbitrary keywords and values needed as the game is developed.
 ;;;
 ;;; Use `(define-thing ...)` to add a thing to the game.

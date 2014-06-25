@@ -15,7 +15,7 @@
   (:use whd-advent.room)
   (:use whd-advent.thing)
   (:use whd-advent.vocab)
-  (:use whd-advent.rooms))
+  (:use whd-advent.world))
 
 (defn argmap [rest]
   (cond 

@@ -1,11 +1,12 @@
-;;;; rooms.clj
+;;;; world.clj
 ;;;;
-;;;; Actual room definitions for Will's Text Adventure
+;;;; World definitions for Will's Text Adventure
 
-(ns whd-advent.rooms
+(ns whd-advent.world
   (:require [clojure.string :as str])
   (:use whd-advent.debug)
-  (:use whd-advent.room))
+  (:use whd-advent.room)
+  (:use whd-advent.thing))
 
 ;;; ## World Map
 ;;;
@@ -16,7 +17,25 @@
   ["Your home base is the picture of comfort, from the deep
    pile shag carpeting to the oversized leather couch."
    [[:tv :broken] 
-    "Still, you'd be much happier if your big-screen TV was working."]])
+    "Still, you'd be much happier if your big-screen TV was working."]]
+  :contents [:sofa :tv :ball])
+
+(define-thing :sofa "battered sofa"
+  "Your sofa is comfortable, but it looks like it has seen better days."
+  :furniture true
+  :contents [:house-key])
+
+(define-thing :tv "big-screen TV"
+  ["It's a great big TV."
+   [[:tv :broken] "Pity about the crack in the screen."]]
+  :furniture true)
+
+(define-thing :ball "soccer ball" 
+  "It's a soccer ball.  Black, white, you know.")
+
+(define-thing :house-key "house key"
+  "Your house key.")
+
 
 (define-room :street "The Street"
   {:n :pub :s :home :e :corner :w :park}
