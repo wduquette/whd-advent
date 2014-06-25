@@ -11,26 +11,43 @@ to abstract it.
 Q: Is there an existing Clojure abstraction I should use?
 
 
-## Things and inventories
+## Command processing and things
 
-Things can be in rooms.  How do they get there?
+We'll need a notion of noun phrases, an adjective and a noun.
+Adjective and noun _strings_ will map to keywords in the vocab namespace.
+Each object will have associated with it a noun keyword, and possibly an
+adjective keyword.  Its ID might in fact be a vector of these, i.e.,
+[:red :key] is the ID of the red key.  But honestly, I think I'd rather
+decouple these.  Thing IDs are always one keyword, and a thing has
+a noun phrase (or more than one) that refer to it.
 
-* Assigned to initial room on definition of thing
-* Assigned to initial room on definition of room
-* Assigned to initial room as part of initial set up?
+Then for a given room we need to be able to build a list of the noun phrases
+that make sense in the context of the room.  And the command parser will need
+to know the vocabulary on the one hand, and the content of the room, so that it
+can match the two up.
 
-Inventory is truly dynamic, where room and thing definitions are not.
-Could define initial locations using one routine, that can also be used
-when starting a new game; also could associate initial content with the
-rooms and build inventories automatically.
+Commands, then, consist of a pattern: 
 
-"Furniture" things exist in rooms for the purpose of being examined and
-otherwise interacted with; they cannot be taken.
+* verb
+* verb noun-phrase
+* verb noun-phrase location
 
-There are a number of kinds of thing that have inventories: rooms, the player,
-other mobs, and things like boxes and desks.
+So parsing is all about taking something like 
 
-For command processing, we need to know what objects are visible in a room,
-and what vocabulary can be used to refer to them.  The :sofa, the [:red :key].
+    put the orange shirt on the wooden table
+    
+and translating it first into vocabulary
 
-We need to able to move things from one inventory to another.  
+	:put [:shirt :orange] [:table :wooden]
+
+and then into references to specific things
+
+    :put :orange-shirt :wooden-table
+
+which is then something an action can handle.
+
+The necessary point is that incomplete wordings can still match things.
+
+    :put [?noun :orange] [:table ?adjective]
+
+If these wild-carded phrases match single things, that's good enough.

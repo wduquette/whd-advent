@@ -14,11 +14,12 @@ The game is a simple console application.  To build and run it:
 
 ## Plans
 
-The next step is to add objects for the player to pick up and manipulated.
-These will be called "things".
+The next step is to define inventories.  An inventory is a (probably sorted) 
+set of things associated with some entity, and also the player.  We might
+also want a :limbo inventory, for objects that will appear later.
 
-The "room description hook" apparatus can probably be generalized for use by
-rooms as well.  In that case, I might want to define a hierarchy:  Room and 
-Thing, which are both GameEntities, and which can be described in the same way. 
-Similarly, I might want an Inventory hierarchy, where both the Player and
-Rooms are Inventories.  We'll see.
+Rooms and things can have a :contents; this is a vector of the things
+located there at the start of the game.  Before the game begins, a function
+will assign the initial contents of things to their inventories, which are
+held separately as part of the mutable game state.
+
