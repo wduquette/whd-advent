@@ -23,3 +23,11 @@ located there at the start of the game.  Before the game begins, a function
 will assign the initial contents of things to their inventories, which are
 held separately as part of the mutable game state.
 
+## Display
+
+Consider building a Swing GUI that has a command line at the bottom, and
+shows the current room in HTML at the top.  Then format HTML instead of
+wrapping text strings.  Could be a lot of fun.
+
+The [SwingBox](http://cssbox.sourceforge.net/swingbox/download.php) might
+be useful, if a JEditorPane won't do the job.
