@@ -17,14 +17,6 @@
   (:use whd-advent.vocab)
   (:use whd-advent.world))
 
-(defn argmap [rest]
-  (cond 
-    (nil? rest) nil 
-    (= (count rest) 1) (first rest) 
-    :else (apply hash-map rest)))
-
-(defn foo [x & rest]
-  (println x "=>" (argmap rest)))
 
 ;;; ## Game Data
 ;;;
@@ -37,8 +29,8 @@
 ;;; the player: his current location (a room) and such-like:
 ;;;
 ;;; * `:here` - The room keyword for the player's current location.
-
-;;; The `player` variable contains the player structure.
+;;; * `:state` - :playing or :done.  This is a sentinel used to end the
+;;;   game loop.
 
 (def player
   (atom
@@ -181,13 +173,10 @@
   (flush))
 
 (defn describe-surroundings
-  "Describe room `r` to the player if it hasn't been seen before.
-  Then, remember that it has been seen."
+  "Describe room `r` to the player."
   [r]
-  (when (fact? [:not :has-seen r])
-    (add-fact! [:has-seen r])
-    (say (describe-room r) :para
-         (describe-exits r))))
+  (say (describe-room r) :para
+       (describe-exits r)))
 
 (defn -main
   "Main routine for the application, including the game REPL."
@@ -196,7 +185,9 @@
   (println "Will's Text Adventure")
   (loop []
     (println)
-    (describe-surroundings (here))
+    (when (fact? [:not :has-seen (here)])
+      (add-fact! [:has-seen (here)])
+      (describe-surroundings (here)))
     (prompt "Well?")
     (eval-command (read-line))
     (when (= (@player :state) :playing)
