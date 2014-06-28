@@ -35,12 +35,62 @@
 (def player
   (atom
     {:state :playing
-     :here  :home}))
+     :here  :home
+     :contents #{}}))
 
 (defn here
   "Returns the current location of the player."
   []
   (@player :here))
+
+
+;;; Inventory
+;;;
+;;; The :player has an inventory, as do those objects with a :contents
+;;; attribute.  There is also a :limbo inventory, for objects with nowhere
+;;; else to be.  An inventory is a set.
+
+(def inventory (atom {}))
+
+(defn container-of
+  "Returns the inventory containing thing t, or nil if none."
+  [t]
+  (first
+    (for [k (keys @inventory) :when (contains? (@inventory k) t)] k)))
+
+
+(defn place-thing! 
+  "Places thing t in inventory i, removing it from its previous container
+  (if any)."
+  [t i]
+  (let [j (container-of t)]
+    ;; Remove t from the old inventory, if it's in one.
+    (when j (swap! inventory assoc j (disj (@inventory j) t)))
+    ;; Next, add it to the new inventory, creating the set if need be.
+    (swap! inventory assoc i (into #{t} (@inventory i))))
+  nil)
+
+(defn place-things! 
+  "Places things ts in inventory i, removing them from their previous containers
+  (if any)."
+  [ts i]
+  (doseq [t ts]
+    (place-thing! t i)))
+
+(defn throw-away!
+  "Throws thing t away by moving it to :limbo."
+  [t]
+  (place-thing! t :limbo))
+
+(defn init-inventory!
+  "Resets the inventory to its state at the start of the game, stepping
+  adding initial :contents from the player, all rooms, and all things."
+  []
+  (reset! inventory {})
+  (place-things! (@player :contents) :player)
+  (doseq [e (keys @entities)]
+    (place-things! (=> e :contents) e)))
+  
 
 
 ;;; ## Actions
@@ -181,6 +231,7 @@
 (defn -main
   "Main routine for the application, including the game REPL."
   [& args]
+  (init-inventory!)
   (set-state! :playing)
   (println "Will's Text Adventure")
   (loop []
