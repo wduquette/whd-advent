@@ -91,6 +91,21 @@
   (doseq [e (keys @entities)]
     (place-things! (=> e :contents) e)))
   
+(defn describe-inventory
+  [i s]
+  ;; FIXME: should be (say), but (say) is in the wrong place and needs
+  ;; work.
+  (println s)
+  (doseq [t (@inventory i)]
+          (println "  " (=> t :name)))
+  (println))
+
+(defn describe-player-inventory 
+  "Lists the player's inventory to the console."
+  []
+  (if (empty? (@inventory :player))
+    (println "You're not carrying anything.")
+    (describe-inventory :player "You're carrying:")))
 
 
 ;;; ## Actions
@@ -185,6 +200,11 @@
   [words]
   ;; TBD: handle excess words
   #(say (describe-exits (here))))
+
+(defmethod xlate-command :inventory
+  [words]
+  ;; TBD: handle excess words
+  #(describe-player-inventory))
 
 (defmethod xlate-command :n
   [words]

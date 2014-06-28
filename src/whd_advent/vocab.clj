@@ -46,6 +46,7 @@
 (define-verb :look "l" "look")
 (define-verb :exits "exits")
 (define-verb :quit "quit" "bye")
+(define-verb :inventory "i" "invent" "inventory")
 
 (define-verb :n "n" "north")
 (define-verb :s "s" "south")
