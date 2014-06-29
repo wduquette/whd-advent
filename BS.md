@@ -25,10 +25,39 @@ Some thoughts about the proper order to break things down into subsystems.
    1. @player
    2. @inventory
    3. Queries and actions based on these.
-   4. Command parser.  Requires knowledge of vocab and actions.
+   4. Command translator.  Requires knowledge of vocab and actions.
    5. Mainline code
 
+Suggestions:
 
+* Move @player, @inventory, and the queries and actions based on them
+  into a new module, state.clj.
+
+* Move the command translator into a new module, command.clj.
+  It should define the commands so that they can be parsed, and then
+  translate from sentences to commands.
+
+* Consider changing vocab.tcl to parser.tcl
+  * Functions to define terms of different parts of speech:
+    * Verbs
+    * Nouns
+    * Prepositions
+    * Noise words (i.e, "the", "a").
+  * Code to parse sentences corresponding to basic patterns
+    * [verb]
+    * [verb noun-phrase]
+    * [verb noun-phrase prep-phrase]
+
+* The command translator then:
+  * Defines commands: verbs with sentence patterns, related to actions.
+  * Defines relevant vocabulary.
+
+* Then, command translation involves:
+  * Parsing the input sentence
+  * Matching nouns to things in the room.
+    * See below.
+  * Matching verb and sentence pattern to a known command
+  * Returning the command for execution.
 
 ## Questions about patterns
 
