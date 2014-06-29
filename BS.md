@@ -3,6 +3,33 @@
 Take nothing here too seriously.  It's either wrong, out-of-date, or in
 the process of being overtaken by events.
 
+## Subsystems
+
+Some thoughts about the proper order to break things down into subsystems.
+
+1. Fundamental Utilities
+   1. tools.clj -- Basic Utility Commands.
+2. Basic Modules and Data Types, with no coupling
+   1. facts.clj -- The fact base is a nice, self-contained module.
+3. Game Entities -- TODO: Probably want a hierarchy.
+   1. entity.clj -- Definition and behavior of entities in general
+   2. room.clj -- Definition and behavior of room entities
+   3. thing.clj -- Definition and behavior of thing entities
+4. Game World 
+   1. world.clj -- Defines the game entities and the initial state of
+      of the game world.  The data defined here is static once defined.
+   2. vocab.clj -- The vocabulary the player can use depends on the
+      things that are defined.
+5. core.clj -- This should just be the setup and main routine.  What
+   else is currently in here?
+   1. @player
+   2. @inventory
+   3. Queries and actions based on these.
+   4. Command parser.  Requires knowledge of vocab and actions.
+   5. Mainline code
+
+
+
 ## Questions about patterns
 
 Rooms and Things follow the same pattern.  I've defined the entity module
