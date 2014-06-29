@@ -62,3 +62,16 @@
     (let [s (if (string? ss) ss (str/join " " ss))] 
       (str/join "\n" (wrap-line width s)))))
 
+(defn say
+  "Output one or more items to the user.
+  TBD: Ideally, if there are consecutive items it should put a space
+  between them."
+  [& xs]
+  (doseq [s xs]
+    (case s
+      :br (print "\n")
+      :para (print "\n\n")
+      (print s)))
+  (print "\n"))
+
+
