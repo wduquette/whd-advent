@@ -3,7 +3,7 @@
 ;;;; Vocabulary for Will's Text Adventure
 (ns whd-advent.vocab
   (:require [clojure.string :as str])
-  (:use whd-advent.debug))
+  (:use whd-advent.tools))
 
 ;;; ## Vocabulary Definition
 ;;;

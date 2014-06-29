@@ -6,7 +6,6 @@
 
 (ns whd-advent.room
   (:require [clojure.string :as str])
-  (:use whd-advent.debug)
   (:use whd-advent.tools)
   (:use whd-advent.entity))
 

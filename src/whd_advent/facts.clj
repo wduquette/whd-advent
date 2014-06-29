@@ -1,6 +1,6 @@
 ;;;; facts.clj
 (ns whd-advent.facts
-    (:use whd-advent.debug))
+    (:use whd-advent.tools))
 
 ;;;;
 ;;;; # The Fact Base

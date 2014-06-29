@@ -4,7 +4,7 @@
 
 (ns whd-advent.world
   (:require [clojure.string :as str])
-  (:use whd-advent.debug)
+  (:use whd-advent.tools)
   (:use whd-advent.room)
   (:use whd-advent.thing))
 

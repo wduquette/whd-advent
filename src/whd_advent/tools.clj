@@ -3,8 +3,16 @@
 ;;;; This module contains individual functions for various purposes.
 
 (ns whd-advent.tools
-  (:require [clojure.string :as str])
-  (:use whd-advent.debug))
+  (:require [clojure.string :as str]))
+
+;;; Debugging Tools
+
+(defn go 
+  "Go to the project namespace whd-advent.<x>, where x can be a string,
+  symbol, or keyword.
+  TODO: Fix this so that it figure out the parent namespace automatically."
+  [x]
+  (in-ns (symbol (str "whd-advent." (name x)))))
 
 ;;; ## Argument Handling
 
