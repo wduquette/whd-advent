@@ -5,6 +5,25 @@
   (:require [clojure.string :as str])
   (:use whd-advent.tools))
 
+;;; TODO:
+;;; Two purposes:
+;;;
+;;; 1. Map english words to keywords.
+;;; 2. Map keywords to parts of speech.
+;;;
+;;; Parsing steps:
+;;;
+;;; 1. Replace words with :keywords.
+;;;    1. On unknown word, say "I don't know what $word means."
+;;; 2. Remove noise words.
+;;; 3. Determine sentence pattern.
+;;;
+;;; (part-of-speech kw)
+;;; (verb? kw)
+;;; (noun? kw)
+;;; (preposition? kw)
+
+
 ;;; ## Vocabulary Definition
 ;;;
 ;;; The game's vocabulary consists of words of different parts of speech.
