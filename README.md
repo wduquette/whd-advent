@@ -3,6 +3,10 @@
 Will's Text Adventure is meant to be a simple Infocom-like text adventure
 game.  I'm writing it as an exercise in learning to program in Clojure.
 
+If you look at the code and ask, "Why on earth is he doing *that*? 
+He ought to be doing *this* instead!" then by all means write me
+an issue!
+
 ## Usage
 
 The game is a simple console application.  To build and run it:
