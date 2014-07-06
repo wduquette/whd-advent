@@ -10,11 +10,11 @@
   (:require [clojure.string :as str])
   (:use whd-advent.tools)
   (:use whd-advent.facts)
+  (:use whd-advent.vocab)
   (:use whd-advent.entity)
   (:use whd-advent.room)
   (:use whd-advent.thing)
   (:use whd-advent.world)
-  (:use whd-advent.vocab)
   (:use whd-advent.state))
 
 ;;; ## Command Translator

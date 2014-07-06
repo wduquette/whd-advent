@@ -29,10 +29,30 @@
 ;;; The game's vocabulary consists of words of different parts of speech.
 ;;; They are represented in code as keywords.  This module contains the
 ;;; mapping from English words to keywords.
-;;;
-;;; Each part of speech has its own map, which is a map from English words
-;;; to keywords.  No English word can map to more than one keyword, but
-;;; synonyms will map to the same keyword.
+
+;;; The synonyms atom is a mapping from English words to keywords.
+(def synonyms (atom {}))
+
+(defn define-synonym
+  "Relates one or more English words to a keyword.  If the word is already 
+  known, any new synonyms are added to the `synonyms` map."
+  [kw & ws]
+  (doseq [w ws]
+    (swap! synonyms assoc (str/lower-case w) kw)))
+  
+(defn translate-word
+  "Given an English word, returns the matching keyword, or nil if none."
+  [w]
+  (@synonyms (str/lower-case w)))
+
+(defn translate-sentence
+  "Given a sentence s, breaks it into words (stripping punctuation) and
+  translates the words into keywords.  The result is a 
+  vector of word/keyword pairs.  If a word is unknown, the keyword is nil."
+  [s]
+  (let [ws (re-seq #"\w+" s)]
+    (map (fn [w] [w (translate-word w)]) ws)))
+
 
 ;;; # Verb Definition
 ;;;
