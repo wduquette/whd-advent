@@ -28,19 +28,48 @@
 ;;;
 ;;; The game's vocabulary consists of words of different parts of speech.
 ;;; They are represented in code as keywords.  This module contains the
-;;; mapping from English words to keywords.
+;;; mapping from English words to logical words (keywords), and the
+;;; tools for defining vocabulary.
+
+
+;;; The words map is a map from logical word keywords to sets, where each
+;;; set is a set of parts of speech.  We use a set, because some words can 
+;;; be multiple parts of speech. For example, :n is a :direction, but also 
+;;; a :verb.
+;;;
+;;; The valid parts of speech are:
+;;;
+;;; :verb         - That is, a command.  It tells the game to do something.
+;;; :noun         - The name for a thing in the game.
+;;; :adjective    - A modifier for a noun.  This allows us to have multiple
+;;;                 keys, for example.
+;;; :direction    - A direction, e.g., :n, :s.
+;;; :preposition  - A preposition, e.g., :to, :from.
+;;; :noise        - A noise word, e.g., :the, :a, :an.  Noise words are
+;;;                 ignored.
+
+(def words (atom {}))
 
 ;;; The synonyms atom is a mapping from English words to keywords.
 (def synonyms (atom {}))
 
-(defn define-synonym
+(defn- define-synonym
   "Relates one or more English words to a keyword.  If the word is already 
   known, any new synonyms are added to the `synonyms` map."
-  [kw & ws]
+  [kw ws]
   (doseq [w ws]
     (swap! synonyms assoc (str/lower-case w) kw)))
-  
-(defn translate-word
+
+(defn define-word 
+  "Defines a logical word, kw, with one or more parts of speech [ps],
+  and one or more synonyms ws."
+  [kw ps & ws] 
+  (define-synonym kw ws)
+  (let [pset (if (keyword? ps) #{ps} (set ps))]
+    (swap! words assoc kw pset))
+  nil)
+
+(defn- translate-word
   "Given an English word, returns the matching keyword, or nil if none."
   [w]
   (@synonyms (str/lower-case w)))
@@ -52,6 +81,11 @@
   [s]
   (let [ws (re-seq #"\w+" s)]
     (map (fn [w] [w (translate-word w)]) ws)))
+
+(defn has-pos?
+  "Returns true if w has the desired part of speech."
+  [w pos]
+  (contains? (@words w) pos))
 
 
 ;;; # Verb Definition
