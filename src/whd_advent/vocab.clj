@@ -87,6 +87,28 @@
   [w pos]
   (contains? (@words w) pos))
 
+;;; Basic Vocabulary
+;;;
+;;; Many words (and especially nouns and adjectives) are defined as part
+;;; of the game world.  Others, including verbs, directions, and so forth,
+;;; are defined here.
+
+(define-word :help      :verb "?" "help")
+(define-word :look      :verb "l" "look")
+(define-word :exits     :verb "exits")
+(define-word :quit      :verb "quit" "bye")
+(define-word :inventory :verb "i" "invent" "inventory")
+
+(define-word :n [:verb :direction] "n" "north")
+(define-word :s [:verb :direction] "s" "south")
+(define-word :e [:verb :direction] "e" "east")
+(define-word :w [:verb :direction] "w" "west")
+
+
+
+;;;;; FIXME!  What follows is the old implementation; it will go once I've
+;;;;; completely replaced it.
+
 
 ;;; # Verb Definition
 ;;;
